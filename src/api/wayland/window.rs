@@ -9,7 +9,7 @@ use platform::MonitorId as PlatformMonitorId;
 use wayland_client::EventIterator;
 use wayland_client::wayland::compositor::WlSurface;
 use wayland_client::wayland::shell::WlShellSurface;
-use super::wayland_window::{DecoratedSurface, add_borders, substract_borders};
+pub use super::wayland_window::{DecoratedSurface, add_borders, substract_borders};
 use super::context::{WaylandContext, WAYLAND_CONTEXT};
 
 #[derive(Clone)]
@@ -25,10 +25,10 @@ impl WindowProxy {
 pub struct Window {
     pub wayland_context: &'static WaylandContext,
     pub surface: WlSurface,
-    shell_window: Mutex<ShellWindow>,
-    evt_queue: Arc<Mutex<VecDeque<Event>>>,
-    inner_size: Mutex<(i32, i32)>,
-    resize_callback: Option<fn(u32, u32)>,
+    pub shell_window: Mutex<ShellWindow>,
+    pub evt_queue: Arc<Mutex<VecDeque<Event>>>,
+    pub inner_size: Mutex<(i32, i32)>,
+    pub resize_callback: Option<fn(u32, u32)>,
 }
 
 impl Window {
@@ -124,7 +124,7 @@ impl<'a> Iterator for WaitEventsIterator<'a> {
     }
 }
 
-enum ShellWindow {
+pub enum ShellWindow {
     Plain(WlShellSurface, EventIterator),
     Decorated(DecoratedSurface)
 }
